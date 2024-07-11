@@ -11,11 +11,13 @@ function App(props) {
     //     />
     // ));
     // console.log(taskList);
-
+    function addTask(name){
+        name? alert(name):alert("Task empty. Type name of a task to be done.");
+    }
   return (
     <div className="todoapp stack-large">
       <h1>TodoMatic</h1>
-      <Form/>
+      <Form addTask={addTask}/>
         <div className="filters btn-group stack-exception">
             <FilterButton/>
             <FilterButton/>
