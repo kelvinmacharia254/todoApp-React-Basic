@@ -1,6 +1,6 @@
 import {useState} from "react";
 function Todo(props){
-    // use for editting
+    // use this state to determine whether to edit or display a task
     const [isEditing, setIsEditing] = useState(false);
 
     const [newName, setNewName] = useState("");

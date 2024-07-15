@@ -4,43 +4,45 @@ import FilterButton from "./components/FilterButton.jsx";
 
 import {useState} from "react";
 // install "npm install nanoid"
-// use to generate unique ids
+// nanoid is used to generate unique ids for every new task added
 import { nanoid } from "nanoid";
 
-function App(props) {
-    // const taskList = props.tasks?.map((task) => (
-    //     <Todo
-    //         id={task.id}
-    //         name={task.name}
-    //         completed={task.completed}
-    //         key={task.id}
-    //     />
-    // ));
-    // console.log(taskList);
+// Remembers components and the App() will re-render with changes in state as expected.
+// All constants should be defined outside the App() to ensure they retain their values all the time.
+const FILTER_MAP = {
+    All: ()=> true,
+    Active: (task) => !task.completed,
+    Completed: (task) => task.completed,
+}
 
+const FILTER_NAMES =Object.keys(FILTER_MAP)
+
+function App(props) {
+    // Manage tasks.
     const [tasks, setTasks] = useState(props.tasks);
+
+    // Filter task based on completion status. Initial state displays all tasks
+    const [filter, setFilter] = useState("All");
+    
     function addTask(name){
         // Function passed as callback prop to the Form component to fetch task name
-
-        // Test code
-        // name? alert(name):alert("Task empty. Type name of a task to be done.");
-
         // Receive task from Form component
         // Update task state
-        // Note: name is a string. Restructure to object to match task object state
+        // Note: name is a string. Restructure to object to match task object state.
+        // Generate unique ID for each task using nanoid package
         const newTask = {id:`todo-${nanoid()}`, name, completed: false};
-        // update tasks on top of existing tast
+        // add a new task to the existing list of tasks
         setTasks([...tasks, newTask]);
     }
 
     function toggleTaskCompleted(id){
         // update task completion status.
         // update tasks completion status depending on the status of the checkbox.
-        // Note: This step is syncing the app with the UI. Synchronizing the browser with the underlying state data
+        // Note: This step is syncing the app with the UI i.e. synchronizing the browser with the underlying state data
         const updatedTasks = tasks.map((task) =>{
-            // if this task has the same ID as the edited task
+            // if this task has the same ID as the target task, invert completion status boolean
             if(task.id === id){
-                return {...task, completed: !task.completed}; // update each task completion by inversion of boolean
+                return {...task, completed: !task.completed};
             }
             return task
         })
@@ -48,19 +50,14 @@ function App(props) {
     }
 
     function deleteTask(id){
-        // delete task
+        // delete task using filter function
          const remainingTasks = tasks.filter((task) => id !== task.id);
-         console.log(remainingTasks);
          setTasks(remainingTasks);
     }
 
-    // Count tasks
-    const tasksNoun = tasks.length !== 1? "tasks": "task"
-    const headingText = `${tasks.length} ${tasksNoun}`;
 
     function editTask(id, newName){
         // edit task
-
         const editedTaskList = tasks.map((task) =>{
             if(task.id === id){
                 return {...task, name: newName};
@@ -69,16 +66,27 @@ function App(props) {
         })
         setTasks(editedTaskList);
     }
+
     // log task
     console.log(tasks);
+
+    // Count tasks
+    const tasksNoun = tasks.length !== 1? "tasks": "task"
+    const headingText = `${tasks.filter(FILTER_MAP[filter]).length} ${tasksNoun}`;
+
   return (
     <div className="todoapp stack-large">
       <h1>TodoMatic</h1>
       <Form addTask={addTask}/>
         <div className="filters btn-group stack-exception">
-            <FilterButton/>
-            <FilterButton/>
-            <FilterButton/>
+            {FILTER_NAMES.map((name)=>(
+        <FilterButton
+            key={name}
+            name={name}
+            isPressed={name===filter}
+            setFilter={setFilter}
+        />
+    ))}
         </div>
 
       <h2 id="list-heading">{headingText}</h2>
@@ -86,10 +94,7 @@ function App(props) {
         role="list"
         className="todo-list stack-large stack-exception"
         aria-labelledby="list-heading">
-        {/*<Todo name="Eat" id="todo-0" completed/>*/}
-        {/*<Todo name="Sleep" id="todo-1"/>*/}
-        {/*<Todo name="Repeat" id="todo-2"/>*/}
-        {tasks?.map((task) => (
+        {tasks.filter(FILTER_MAP[filter]).map((task) => (
         <Todo
             id={task.id}
             name={task.name}
