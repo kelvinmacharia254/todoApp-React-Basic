@@ -2,7 +2,7 @@ import Todo from "./components/Todo.jsx";
 import Form from "./components/Form.jsx";
 import FilterButton from "./components/FilterButton.jsx";
 
-import {useState} from "react";
+import {useState, useRef, useEffect} from "react";
 // install "npm install nanoid"
 // nanoid is used to generate unique ids for every new task added
 import { nanoid } from "nanoid";
@@ -16,6 +16,16 @@ const FILTER_MAP = {
 }
 
 const FILTER_NAMES =Object.keys(FILTER_MAP)
+
+function usePrevious(value){
+    // this hook prevents edit button selection on initial loading by storing previous edit state.
+    // initially wasEditing should be false
+    const ref = useRef();
+    useEffect(() => {
+        ref.current = value;
+    })
+    return ref.current
+}
 
 function App(props) {
     // Manage tasks.
@@ -74,6 +84,14 @@ function App(props) {
     const tasksNoun = tasks.length !== 1? "tasks": "task"
     const headingText = `${tasks.filter(FILTER_MAP[filter]).length} ${tasksNoun}`;
 
+    const listHeadingRef = useRef(null);
+    const prevTaskLength = usePrevious(tasks.length);
+
+    useEffect(()=>{
+        if(tasks.length < prevTaskLength){
+            listHeadingRef.current.focus()
+        }
+    },[tasks.length, prevTaskLength]);
   return (
     <div className="todoapp stack-large">
       <h1>TodoMatic</h1>
@@ -89,7 +107,7 @@ function App(props) {
     ))}
         </div>
 
-      <h2 id="list-heading">{headingText}</h2>
+      <h2 id="list-heading" tabIndex="-1" ref={listHeadingRef}>{headingText}</h2>
       <ul
         role="list"
         className="todo-list stack-large stack-exception"
