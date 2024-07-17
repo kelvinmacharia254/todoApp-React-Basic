@@ -68,7 +68,7 @@ function App(props) {
     }
 
     // log task
-    console.log(tasks);
+    // console.log(tasks);
 
     // Count tasks
     const tasksNoun = tasks.length !== 1? "tasks": "task"

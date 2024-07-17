@@ -1,9 +1,27 @@
-import {useState} from "react";
-function Todo(props){
-    // use this state to determine whether to edit or display a task
-    const [isEditing, setIsEditing] = useState(false);
+import {useState, useRef, useEffect} from "react";
 
+
+function usePrevious(value){
+    // this hook prevents edit button selection on initial loading by storing previous edit state.
+    // initially wasEditing should be false
+    const ref = useRef();
+    useEffect(() => {
+        ref.current = value;
+    })
+    return ref.current
+}
+function Todo(props){
+    // use this state to determine whether to edit or display a task using the edit and view template
+    const [isEditing, setIsEditing] = useState(false);
+    // manage state of new name with two-way binding
     const [newName, setNewName] = useState("");
+
+    // Access DOM of HTML elements to determine when to focus on each
+    const editFieldRef = useRef(null); //
+    const editButtonRef = useRef(null);
+
+    // custom usePrevious hook. Prevent edit button selection on initial app load
+    const wasEditing = usePrevious(isEditing);
 
     function handleChange(e){
         setNewName(e.target.value);
@@ -22,7 +40,14 @@ function Todo(props){
                   <label className="todo-label" htmlFor={props.id}>
                     New name for {props.name}
                   </label>
-                  <input id={props.id} className="todo-text" type="text" value={newName} onChange={handleChange} />
+                  <input
+                      id={props.id}
+                      className="todo-text"
+                      type="text"
+                      value={newName}
+                      onChange={handleChange}
+                      ref={editFieldRef}
+                  />
                 </div>
                 <div className="btn-group">
                   <button type="button" className="btn todo-cancel" onClick={()=> setIsEditing(false)}>
@@ -50,7 +75,12 @@ function Todo(props){
           </label>
         </div>
         <div className="btn-group">
-          <button type="button" className="btn" onClick={() => setIsEditing(true)}>
+          <button
+              type="button"
+              className="btn"
+              onClick={() => setIsEditing(true)}
+              ref={editButtonRef}
+          >
             Edit <span className="visually-hidden">{props.name}</span>
           </button>
           <button
@@ -62,6 +92,14 @@ function Todo(props){
         </div>
       </div>
     );
+    // set focus on input in task edit mode and edit button in view mode
+    useEffect(() => {
+        if (!wasEditing && isEditing){
+            editFieldRef.current.focus()
+        }else if(wasEditing && !isEditing){
+            editButtonRef.current.focus()
+        }
+    }, [isEditing]);
 
     return (
         <li className="todo stack-small">
