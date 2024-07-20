@@ -21,3 +21,4 @@ Currently, two official plugins are available:
 8. call back functions and event handling.
 9. Styling with CSS classes
 10. Basics of Accessible Rich Internet application(ARIA) principles
+11. Context data management with createContext and useContext hooks

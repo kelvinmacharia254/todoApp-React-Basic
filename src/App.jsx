@@ -2,7 +2,7 @@ import Todo from "./components/Todo.jsx";
 import Form from "./components/Form.jsx";
 import FilterButton from "./components/FilterButton.jsx";
 
-import {useState, useRef, useEffect} from "react";
+import {useState, useRef, useEffect, useContext} from "react";
 // install "npm install nanoid"
 // nanoid is used to generate unique ids for every new task added
 import { nanoid } from "nanoid";
@@ -17,6 +17,8 @@ const FILTER_MAP = {
 
 const FILTER_NAMES =Object.keys(FILTER_MAP)
 
+import {useTodoContext} from "./todoContext.jsx";
+
 function usePrevious(value){
     // this hook prevents edit button selection on initial loading by storing previous edit state.
     // initially wasEditing should be false
@@ -27,9 +29,9 @@ function usePrevious(value){
     return ref.current
 }
 
-function App(props) {
+function App() {
     // Manage tasks.
-    const [tasks, setTasks] = useState(props.tasks);
+    const {tasks, setTasks} = useTodoContext()
 
     // Filter task based on completion status. Initial state displays all tasks
     const [filter, setFilter] = useState("All");
@@ -94,26 +96,26 @@ function App(props) {
     },[tasks.length, prevTaskLength]);
   return (
     <div className="todoapp stack-large">
-      <h1>TodoMatic</h1>
-      <Form addTask={addTask}/>
+        <h1>TodoMatic</h1>
+        <Form addTask={addTask}/>
         <div className="filters btn-group stack-exception">
             {FILTER_NAMES.map((name)=>(
-        <FilterButton
+            <FilterButton
             key={name}
             name={name}
             isPressed={name===filter}
             setFilter={setFilter}
-        />
-    ))}
+            />
+            ))}
         </div>
 
-      <h2 id="list-heading" tabIndex="-1" ref={listHeadingRef}>{headingText}</h2>
-      <ul
-        role="list"
-        className="todo-list stack-large stack-exception"
-        aria-labelledby="list-heading">
-        {tasks.filter(FILTER_MAP[filter]).map((task) => (
-        <Todo
+        <h2 id="list-heading" tabIndex="-1" ref={listHeadingRef}>{headingText}</h2>
+        <ul
+            role="list"
+            className="todo-list stack-large stack-exception"
+            aria-labelledby="list-heading">
+            {tasks.filter(FILTER_MAP[filter]).map((task) => (
+            <Todo
             id={task.id}
             name={task.name}
             completed={task.completed}
@@ -121,11 +123,11 @@ function App(props) {
             toggleTaskCompleted={toggleTaskCompleted}
             deleteTask={deleteTask}
             editTask={editTask}
-        />
-    ))}
-      </ul>
+            />
+            ))}
+        </ul>
     </div>
-  );
+  )
 }
 
 export default App;
