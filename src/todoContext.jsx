@@ -16,11 +16,8 @@ const TodoContext = createContext({
 
 });
 
-export default function TodoContextProvider({ children }) {
-    // Manage tasks
-    const [tasks, setTasks] = useState(dummyTasks);
 
-    function usePrevious(value){
+function usePrevious(value){
     // this hook prevents edit button selection on initial loading by storing previous edit state.
     // initially wasEditing should be false
     const ref = useRef();
@@ -29,6 +26,10 @@ export default function TodoContextProvider({ children }) {
     })
     return ref.current
     }
+
+export default function TodoContextProvider({ children }) {
+    // Manage tasks
+    const [tasks, setTasks] = useState(dummyTasks);
 
     function addTask(name){
         // Function passed as callback prop to the Form component to fetch task name
