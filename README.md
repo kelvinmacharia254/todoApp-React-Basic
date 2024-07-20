@@ -1,14 +1,11 @@
-# React Essential
+# Learn React with a Todo App
 
-Dive into basics of ReactJs using a todo app.
+Dive into basics and advanced concepts of ReactJs using a todo app.
 
 ![img.png](img.png)
 
-Reference:
-
+Reference: mdn docs 
 https://developer.mozilla.org/en-US/docs/Learn/Tools_and_testing/Client-side_JavaScript_frameworks/React_todo_list_beginning
-
-Currently, two official plugins are available:
 
 ### Concepts
 1. Jsx
@@ -21,4 +18,4 @@ Currently, two official plugins are available:
 8. call back functions and event handling.
 9. Styling with CSS classes
 10. Basics of Accessible Rich Internet application(ARIA) principles
-11. Context data management with createContext and useContext hooks
+11. Use of createContext and useContext hooks for sharing state and data across components to avoid excessive prop drilling

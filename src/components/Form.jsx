@@ -1,9 +1,13 @@
 import {useState} from "react";
-function Form(props) {
+
+import {useTodoContext} from "../todoContext.jsx";
+function Form() {
+    // unpack context
+    const {addTask} = useTodoContext()
     const [name, setName] = useState("");
     function handleSubmit(event) {
         event.preventDefault()
-        props.addTask(name)
+        addTask(name)
         setName("")
     }
 

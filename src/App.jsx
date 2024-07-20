@@ -2,10 +2,7 @@ import Todo from "./components/Todo.jsx";
 import Form from "./components/Form.jsx";
 import FilterButton from "./components/FilterButton.jsx";
 
-import {useState, useRef, useEffect, useContext} from "react";
-// install "npm install nanoid"
-// nanoid is used to generate unique ids for every new task added
-import { nanoid } from "nanoid";
+import {useState, useRef, useEffect} from "react";
 
 // Remembers components and the App() will re-render with changes in state as expected.
 // All constants should be defined outside the App() to ensure they retain their values all the time.
@@ -19,33 +16,12 @@ const FILTER_NAMES =Object.keys(FILTER_MAP)
 
 import {useTodoContext} from "./todoContext.jsx";
 
-function usePrevious(value){
-    // this hook prevents edit button selection on initial loading by storing previous edit state.
-    // initially wasEditing should be false
-    const ref = useRef();
-    useEffect(() => {
-        ref.current = value;
-    })
-    return ref.current
-}
-
 function App() {
     // Manage tasks.
-    const {tasks, setTasks} = useTodoContext()
+    const {tasks, setTasks, usePrevious} = useTodoContext()
 
     // Filter task based on completion status. Initial state displays all tasks
     const [filter, setFilter] = useState("All");
-    
-    function addTask(name){
-        // Function passed as callback prop to the Form component to fetch task name
-        // Receive task from Form component
-        // Update task state
-        // Note: name is a string. Restructure to object to match task object state.
-        // Generate unique ID for each task using nanoid package
-        const newTask = {id:`todo-${nanoid()}`, name, completed: false};
-        // add a new task to the existing list of tasks
-        setTasks([...tasks, newTask]);
-    }
 
     function toggleTaskCompleted(id){
         // update task completion status.
@@ -97,7 +73,7 @@ function App() {
   return (
     <div className="todoapp stack-large">
         <h1>TodoMatic</h1>
-        <Form addTask={addTask}/>
+        <Form/>
         <div className="filters btn-group stack-exception">
             {FILTER_NAMES.map((name)=>(
             <FilterButton

@@ -1,16 +1,9 @@
 import {useState, useRef, useEffect} from "react";
 
-
-function usePrevious(value){
-    // this hook prevents edit button selection on initial loading by storing previous edit state.
-    // initially wasEditing should be false
-    const ref = useRef();
-    useEffect(() => {
-        ref.current = value;
-    })
-    return ref.current
-}
+import {useTodoContext} from "../todoContext.jsx";
 function Todo(props){
+    // unpack context
+    const {usePrevious} = useTodoContext();
     // use this state to determine whether to edit or display a task using the edit and view template
     const [isEditing, setIsEditing] = useState(false);
     // manage state of new name with two-way binding
