@@ -43,6 +43,9 @@ function tasksReducer(state, action) {
             return task
             })
             return updatedTasks }
+        case "DELETE-TASK":
+            const remainingTasks = action.payload.tasks.filter((task) => action.payload.id !== task.id);
+            return remainingTasks
     }
 }
 
@@ -62,11 +65,17 @@ export default function TodoContextProvider({ children }) {
         tasksDipatch({type:"TOGGLE-TASK-STATUS", payload:{id: id, tasks:tasks}})
     }
 
+    function deleteTask(id){
+        // delete task using filter function
+        tasksDipatch({type:"DELETE-TASK", payload:{id: id, tasks:tasks}})
+    }
+
      const ctxValue =
          {
              tasks:tasks,
              // setTasks:setTasks,
              toggleTaskCompleted: toggleTaskCompleted,
+             deleteTask: deleteTask,
              usePrevious:usePrevious,
              addTask: addTask,
          };

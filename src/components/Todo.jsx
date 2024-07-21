@@ -3,7 +3,7 @@ import {useState, useRef, useEffect} from "react";
 import {useTodoContext} from "../todoContext.jsx";
 function Todo(props){
     // unpack context
-    const {toggleTaskCompleted, usePrevious} = useTodoContext();
+    const {toggleTaskCompleted, deleteTask, usePrevious} = useTodoContext();
     // use this state to determine whether to edit or display a task using the edit and view template
     const [isEditing, setIsEditing] = useState(false);
     // manage state of new name with two-way binding
@@ -79,7 +79,7 @@ function Todo(props){
           <button
             type="button"
             className="btn btn__danger"
-            onClick={() => props.deleteTask(props.id)}>
+            onClick={() => deleteTask(props.id)}>
             Delete <span className="visually-hidden">{props.name}</span>
           </button>
         </div>

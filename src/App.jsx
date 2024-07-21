@@ -23,12 +23,6 @@ function App() {
     // Filter task based on completion status. Initial state displays all tasks
     const [filter, setFilter] = useState("All");
 
-    function deleteTask(id){
-        // delete task using filter function
-         const remainingTasks = tasks.filter((task) => id !== task.id);
-         setTasks(remainingTasks);
-    }
-
     function editTask(id, newName){
         // edit task
         const editedTaskList = tasks.map((task) =>{
@@ -81,7 +75,6 @@ function App() {
             name={task.name}
             completed={task.completed}
             key={task.id}
-            deleteTask={deleteTask}
             editTask={editTask}
             />
             ))}
