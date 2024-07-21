@@ -89,6 +89,7 @@ function Todo(props){
     useEffect(() => {
         if (!wasEditing && isEditing){
             editFieldRef.current.focus()
+            editFieldRef.current.value = props.name
         }else if(wasEditing && !isEditing){
             editButtonRef.current.focus()
         }
