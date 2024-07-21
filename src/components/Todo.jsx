@@ -3,7 +3,7 @@ import {useState, useRef, useEffect} from "react";
 import {useTodoContext} from "../todoContext.jsx";
 function Todo(props){
     // unpack context
-    const {toggleTaskCompleted, deleteTask, usePrevious} = useTodoContext();
+    const {toggleTaskCompleted, deleteTask,editTask, usePrevious} = useTodoContext();
     // use this state to determine whether to edit or display a task using the edit and view template
     const [isEditing, setIsEditing] = useState(false);
     // manage state of new name with two-way binding
@@ -22,7 +22,7 @@ function Todo(props){
 
     function handleSubmit(e){
         e.preventDefault();
-        props.editTask(props.id, newName);
+        editTask(props.id, newName);
         setNewName("")
         setIsEditing(false);
     }

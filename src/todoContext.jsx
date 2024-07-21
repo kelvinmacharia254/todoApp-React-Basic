@@ -46,6 +46,14 @@ function tasksReducer(state, action) {
         case "DELETE-TASK":
             const remainingTasks = action.payload.tasks.filter((task) => action.payload.id !== task.id);
             return remainingTasks
+        case "EDIT-TASK":
+            const editedTaskList = action.payload.tasks.map((task) =>{
+            if(task.id === action.payload.id){
+                return {...task, name: action.payload.newName};
+            }
+            return task
+            })
+            return editedTaskList
     }
 }
 
@@ -70,12 +78,18 @@ export default function TodoContextProvider({ children }) {
         tasksDipatch({type:"DELETE-TASK", payload:{id: id, tasks:tasks}})
     }
 
+    function editTask(id, newName){
+        // edit task
+        tasksDipatch({type:"EDIT-TASK", payload:{id: id, newName: newName, tasks: tasks}})
+    }
+
      const ctxValue =
          {
              tasks:tasks,
              // setTasks:setTasks,
              toggleTaskCompleted: toggleTaskCompleted,
              deleteTask: deleteTask,
+             editTask:editTask,
              usePrevious:usePrevious,
              addTask: addTask,
          };

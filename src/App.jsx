@@ -23,17 +23,6 @@ function App() {
     // Filter task based on completion status. Initial state displays all tasks
     const [filter, setFilter] = useState("All");
 
-    function editTask(id, newName){
-        // edit task
-        const editedTaskList = tasks.map((task) =>{
-            if(task.id === id){
-                return {...task, name: newName};
-            }
-            return task
-        })
-        setTasks(editedTaskList);
-    }
-
     // log task
     // console.log(tasks);
 
@@ -71,11 +60,10 @@ function App() {
             aria-labelledby="list-heading">
             {tasks.filter(FILTER_MAP[filter]).map((task) => (
             <Todo
-            id={task.id}
-            name={task.name}
-            completed={task.completed}
-            key={task.id}
-            editTask={editTask}
+                id={task.id}
+                name={task.name}
+                completed={task.completed}
+                key={task.id}
             />
             ))}
         </ul>
