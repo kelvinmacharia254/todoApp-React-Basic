@@ -4,8 +4,8 @@
 * ContextAPI had been illustrated with task state, usePrevious custom hook and addTask helper function.
 * */
 
-import {createContext, useContext, useEffect, useRef, useState} from "react";
-import {dummyTasks} from "./dummyTasks.js";
+import {createContext, useContext, useEffect, useRef, useState, useReducer} from "react";
+import {initialTasks} from "./initialTasks.js";
 
 
 // install "npm install nanoid"
@@ -27,25 +27,29 @@ function usePrevious(value){
     return ref.current
     }
 
+function tasksReducer(state, action) {
+    switch(action.type){
+        case "ADD-TASK":
+            const newTask = {id:`todo-${nanoid()}`, name: action.payload, completed: false};
+            const updatedTasks = [...state, newTask]
+            console.log(updatedTasks)
+            return updatedTasks
+    }
+}
+
 export default function TodoContextProvider({ children }) {
     // Manage tasks
-    const [tasks, setTasks] = useState(dummyTasks);
+    // const [tasks, setTasks] = useState(initialTasks);
+    const [tasks, tasksDipatch] = useReducer(tasksReducer, initialTasks)
 
     function addTask(name){
-        // Function passed as callback prop to the Form component to fetch task name
-        // Receive task from Form component
-        // Update task state
-        // Note: name is a string. Restructure to object to match task object state.
-        // Generate unique ID for each task using nanoid package
-        const newTask = {id:`todo-${nanoid()}`, name, completed: false};
-        // add a new task to the existing list of tasks
-        setTasks([...tasks, newTask]);
+        tasksDipatch({type:"ADD-TASK", payload: name})
     }
 
      const ctxValue =
          {
              tasks:tasks,
-             setTasks:setTasks,
+             // setTasks:setTasks,
              usePrevious:usePrevious,
              addTask: addTask,
          };

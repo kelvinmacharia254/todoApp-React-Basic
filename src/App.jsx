@@ -18,7 +18,7 @@ import {useTodoContext} from "./todoContext.jsx";
 
 function App() {
     // Manage tasks.
-    const {tasks, setTasks, usePrevious} = useTodoContext()
+    const {tasks, usePrevious} = useTodoContext()
 
     // Filter task based on completion status. Initial state displays all tasks
     const [filter, setFilter] = useState("All");
@@ -106,4 +106,4 @@ function App() {
   )
 }
 
-export default App;
+export default App
