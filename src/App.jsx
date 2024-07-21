@@ -23,26 +23,11 @@ function App() {
     // Filter task based on completion status. Initial state displays all tasks
     const [filter, setFilter] = useState("All");
 
-    function toggleTaskCompleted(id){
-        // update task completion status.
-        // update tasks completion status depending on the status of the checkbox.
-        // Note: This step is syncing the app with the UI i.e. synchronizing the browser with the underlying state data
-        const updatedTasks = tasks.map((task) =>{
-            // if this task has the same ID as the target task, invert completion status boolean
-            if(task.id === id){
-                return {...task, completed: !task.completed};
-            }
-            return task
-        })
-        setTasks(updatedTasks); // update tasks state
-    }
-
     function deleteTask(id){
         // delete task using filter function
          const remainingTasks = tasks.filter((task) => id !== task.id);
          setTasks(remainingTasks);
     }
-
 
     function editTask(id, newName){
         // edit task
@@ -96,7 +81,6 @@ function App() {
             name={task.name}
             completed={task.completed}
             key={task.id}
-            toggleTaskCompleted={toggleTaskCompleted}
             deleteTask={deleteTask}
             editTask={editTask}
             />

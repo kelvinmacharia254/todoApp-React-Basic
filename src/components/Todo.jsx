@@ -3,7 +3,7 @@ import {useState, useRef, useEffect} from "react";
 import {useTodoContext} from "../todoContext.jsx";
 function Todo(props){
     // unpack context
-    const {usePrevious} = useTodoContext();
+    const {toggleTaskCompleted, usePrevious} = useTodoContext();
     // use this state to determine whether to edit or display a task using the edit and view template
     const [isEditing, setIsEditing] = useState(false);
     // manage state of new name with two-way binding
@@ -61,7 +61,7 @@ function Todo(props){
             id={props.id}
             type="checkbox"
             defaultChecked={props.completed}
-            onChange={() => props.toggleTaskCompleted(props.id)}
+            onChange={() => toggleTaskCompleted(props.id)}
           />
           <label className="todo-label" htmlFor={props.id}>
             {props.name}

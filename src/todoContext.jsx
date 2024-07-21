@@ -29,11 +29,20 @@ function usePrevious(value){
 
 function tasksReducer(state, action) {
     switch(action.type){
-        case "ADD-TASK":
+        case "ADD-TASK":{
             const newTask = {id:`todo-${nanoid()}`, name: action.payload, completed: false};
-            const updatedTasks = [...state, newTask]
+            let updatedTasks = [...state, newTask]
             console.log(updatedTasks)
-            return updatedTasks
+            return updatedTasks}
+        case "TOGGLE-TASK-STATUS": {
+            let updatedTasks = action.payload.tasks.map((task) =>{
+            // if this task has the same ID as the target task, invert completion status boolean
+            if(task.id === action.payload.id){
+                return {...task, completed: !task.completed};
+            }
+            return task
+            })
+            return updatedTasks }
     }
 }
 
@@ -46,10 +55,18 @@ export default function TodoContextProvider({ children }) {
         tasksDipatch({type:"ADD-TASK", payload: name})
     }
 
+    function toggleTaskCompleted(id){
+        // update task completion status.
+        // update tasks completion status depending on the status of the checkbox.
+        // Note: This step is syncing the app with the UI i.e. synchronizing the browser with the underlying state data
+        tasksDipatch({type:"TOGGLE-TASK-STATUS", payload:{id: id, tasks:tasks}})
+    }
+
      const ctxValue =
          {
              tasks:tasks,
              // setTasks:setTasks,
+             toggleTaskCompleted: toggleTaskCompleted,
              usePrevious:usePrevious,
              addTask: addTask,
          };
